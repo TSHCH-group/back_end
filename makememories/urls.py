@@ -16,13 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+from rest_framework.documentation import include_docs_urls
+from rest_framework.schemas import get_schema_view
 from django.conf.urls.static import static
+
+API_TITLE = 'Make Memories Api'
+schema_view = get_schema_view(title=API_TITLE)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('rest_auth.urls')),
     path('registration/', include('rest_auth.registration.urls')),
     path('home/', include('posts.urls'), name='home'),
+    path('docs/', include_docs_urls(title=API_TITLE)),
+    path('schema/', schema_view)
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
