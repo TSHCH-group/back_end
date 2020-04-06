@@ -14,6 +14,8 @@ pull from remote                : "git pull -u origin creating_api"
 change branch                   : "git checkout creating_api"
 
 now install dependencies        : "pipenv install -r requirements"
+make migrations                 : "python manage.py makemigrations" or "python3 manage.py makemigrations"
+migrate                         : "python manage.py migrate" or "python3 manage.py migrate"
 finally runserver               : "python manage.py runserver"
 
 in order to read docs open      : http://127.0.0.1:8000/docs/
