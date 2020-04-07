@@ -1,19 +1,26 @@
 from django.contrib import admin
-from .models import Post, Comment
+from .models import Post, Comment, PostImages
 # Register your models here.
 
 
-class CommentInline(admin.TabularInline): # new
+class CommentInline(admin.TabularInline):
     model = Comment
     extra = 0
 
 
-class PostAdmin(admin.ModelAdmin): # new
+class PostImagesInline(admin.TabularInline):
+    model = PostImages
+    extra = 0
+
+
+class PostAdmin(admin.ModelAdmin):
     inlines = [
         CommentInline,
+        PostImagesInline,
     ]
 
 
-admin.site.register(Post, PostAdmin) # new
+admin.site.register(Post, PostAdmin)
 admin.site.register(Comment)
+admin.site.register(PostImages)
 

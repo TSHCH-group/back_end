@@ -17,6 +17,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(get_user_model(), related_name='comments', on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
 
@@ -24,6 +25,6 @@ class Comment(models.Model):
         return self.text
 
 
-class Image(models.Model):
+class PostImages(models.Model):
     user = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
     image = models.ImageField(upload_to='post')
