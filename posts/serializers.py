@@ -5,7 +5,7 @@ class PostSerializerForList(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = Post
-        fields = ['id', 'user', 'image', 'description', 'number_of_likes', 'creation_date']
+        fields = ['id', 'user', 'images', 'description', 'number_of_likes', 'creation_date']
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):

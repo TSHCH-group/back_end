@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 class Post(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=False)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='posts')
     number_of_likes = models.PositiveIntegerField(default=0)
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
@@ -23,3 +22,8 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class Image(models.Model):
+    user = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to='post')
