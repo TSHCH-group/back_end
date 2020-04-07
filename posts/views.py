@@ -8,5 +8,10 @@ class PostListAPIView(generics.ListAPIView):
     serializer_class = PostSerializerForList
 
 
+class PostDetailAPIView(generics.RetrieveDestroyAPIView):
+    queryset = Post.objects.all()
+    permission_classes = ()
+
+
 
 
