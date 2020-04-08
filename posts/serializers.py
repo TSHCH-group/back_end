@@ -24,12 +24,6 @@ class CommentSerializerForCreate(serializers.ModelSerializer):
         fields = ['post_id', 'date', 'text']
 
 
-class CommentSerializerForList(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = ['id', 'post_id', 'user', 'date', 'text']
-
-
 class CommentSerializerForDetail(serializers.ModelSerializer):
     class Meta:
         model = Comment

@@ -1,8 +1,9 @@
 from rest_framework import generics, permissions
 from .models import Post, Comment
 from .serializers import (
-    PostSerializerForList, CommentSerializerForCreate, CommentSerializerForList,
-    CommentSerializerForDetail
+    PostSerializerForList, 
+    CommentSerializerForCreate,
+    CommentSerializerForDetail,
 )
 
 
@@ -24,12 +25,6 @@ class CommentCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-
-class CommentPostListAPIView(generics.ListAPIView):
-    queryset = Comment.objects.all()
-    permission_classes = (permissions.AllowAny,)
-    serializer_class = CommentSerializerForList
 
 
 class CommentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
