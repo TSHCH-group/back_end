@@ -26,5 +26,5 @@ class Comment(models.Model):
 
 
 class PostImages(models.Model):
-    user = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
     image = models.ImageField(upload_to='post')
