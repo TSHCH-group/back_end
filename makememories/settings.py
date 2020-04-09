@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = '&&oay!f%x88e2a%b&4c4t^gs4)-2gayb4&n%ql-sc!i8$l68vg'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -49,7 +47,6 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'rest_framework_swagger',
     'storages',
-
 
     # Local apps
     'posts.apps.PostsConfig',
@@ -86,7 +83,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'makememories.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -96,7 +92,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -116,7 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -129,7 +123,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -151,13 +144,14 @@ REST_FRAMEWORK = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-SITE_ID = 1 
+SITE_ID = 1
 
-REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
 
 AWS_ACCESS_KEY_ID = 'AKIA6KJK35DIJS3TAQ7F'
 AWS_SECRET_ACCESS_KEY = 'vqf5ZrIEf6gpnPqZa0ODnc0BMKHExHxwK3hBU3cE'
 AWS_STORAGE_BUCKET_NAME = 'makememories'
+
 AWS_S3_REGION_NAME = 'ap-northeast-2' #change to your region
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
