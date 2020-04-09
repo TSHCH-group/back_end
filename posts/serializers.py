@@ -4,10 +4,11 @@ from .models import Post, Comment
 
 class PostSerializerForList(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
+    profile_photo = serializers.ImageField(source='user.company.profile_photo', read_only=True)
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'images', 'description', 'number_of_likes', 'creation_date']
+        fields = ['id', 'user', 'profile_photo' , 'images', 'description', 'number_of_likes', 'creation_date']
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):
@@ -15,7 +16,13 @@ class PostSerializerForDetail(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'image', 'description', 'number_of_likes', 'creation_date', 'update_date', 'comments']
+        fields = ['id', 'user', 'images', 'description', 'creation_date', 'update_date', 'comments']
+
+
+class PostSerializerForCreate(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['description', 'images']
 
 
 class CommentSerializerForCreate(serializers.ModelSerializer):

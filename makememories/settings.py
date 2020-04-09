@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'posts.apps.PostsConfig',
+    'companies.apps.CompaniesConfig',
 ]
 
 MIDDLEWARE = [
@@ -157,6 +158,8 @@ REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoS
 AWS_ACCESS_KEY_ID = 'AKIA6KJK35DIJS3TAQ7F'
 AWS_SECRET_ACCESS_KEY = 'vqf5ZrIEf6gpnPqZa0ODnc0BMKHExHxwK3hBU3cE'
 AWS_STORAGE_BUCKET_NAME = 'makememories'
+AWS_S3_REGION_NAME = 'ap-northeast-2' #change to your region
+AWS_S3_SIGNATURE_VERSION = 's3v4'
 
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
