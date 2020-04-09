@@ -15,7 +15,6 @@ class ImageUrlField(serializers.RelatedField):
 
 class PostSerializerForList(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
-
     profile_photo = serializers.ImageField(source='user.company.profile_photo', read_only=True)
     images = ImageUrlField(read_only=True, many=True)
 
