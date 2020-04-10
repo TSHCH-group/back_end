@@ -20,11 +20,13 @@ class PostSerializerForList(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'profile_photo' , 'images', 'description', 'number_of_likes', 'creation_date']
+        fields = ['id', 'user', 'profile_photo', 'images', 'description', 'number_of_likes', 'creation_date']
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
+    images = ImageUrlField(read_only=True, many=True)
+    comments = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Post

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+
 # Create your models here.
 
 class Post(models.Model):
@@ -14,7 +15,6 @@ class Post(models.Model):
         return self.description
 
 
-
 class Comment(models.Model):
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(get_user_model(), related_name='comments', on_delete=models.CASCADE)
@@ -22,7 +22,7 @@ class Comment(models.Model):
     text = models.TextField()
 
     def __str__(self):
-        return self.text
+        return '%s: %s' % (self.user, self.text)
 
 
 class PostImages(models.Model):
