@@ -13,6 +13,14 @@ class ImageUrlField(serializers.RelatedField):
         return url
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['user', 'text']
+
+
 class PostSerializerForList(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
     profile_photo = serializers.ImageField(source='user.company.profile_photo', read_only=True)
@@ -20,13 +28,13 @@ class PostSerializerForList(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'profile_photo', 'images', 'description', 'number_of_likes', 'creation_date']
+        fields = ['user', 'profile_photo', 'images', 'description', 'number_of_likes', 'creation_date']
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
     images = ImageUrlField(read_only=True, many=True)
-    comments = serializers.StringRelatedField(many=True)
+    comments = CommentSerializer(many=True)
 
     class Meta:
         model = Post
