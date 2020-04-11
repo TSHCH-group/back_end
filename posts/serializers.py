@@ -25,10 +25,11 @@ class PostSerializerForList(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
     profile_photo = serializers.ImageField(source='user.company.profile_photo', read_only=True)
     images = ImageUrlField(read_only=True, many=True)
+    detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
 
     class Meta:
         model = Post
-        fields = ['user', 'profile_photo', 'images', 'description', 'number_of_likes', 'creation_date']
+        fields = ['id', 'user', 'profile_photo', 'images', 'description', 'number_of_likes', 'creation_date', 'detail']
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):
