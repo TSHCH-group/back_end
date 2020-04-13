@@ -26,6 +26,7 @@ schema_view = get_schema_view(title=API_TITLE)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('company/', include('companies.urls')),
+    path('favorite/', include('favorites.urls')),
     path('authentification/', include('rest_auth.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('registration/', include('rest_auth.registration.urls')),
