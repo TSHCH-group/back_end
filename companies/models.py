@@ -25,7 +25,6 @@ class Company(models.Model):
     company_name = models.CharField(max_length=50)
     profile_photo = models.ImageField(upload_to='profile_photos', blank=True)
     background_photo = models.ImageField(upload_to='back_photos', blank=True)
-    background_photo_small = models.ImageField(upload_to='back_photos', blank=True)
     short_description = models.CharField(max_length=150)
     description = models.TextField()
 
@@ -35,5 +34,4 @@ class Company(models.Model):
     def save(self, *args, **kwargs):
         self.profile_photo = compress(self.profile_photo)
         self.background_photo = compress(self.background_photo, 40)
-        self.background_photo_small = compress(self.background_photo, 30)
         super().save(*args, **kwargs)

@@ -21,8 +21,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class PostSerializerForList(serializers.ModelSerializer):
-    user = serializers.CharField(source='user.username', read_only=True)
-    profile_photo = serializers.ImageField(source='user.company.profile_photo', read_only=True)
+    company = serializers.CharField(source='company.company_name', read_only=True)
+    profile_photo = serializers.ImageField(source='company.profile_photo', read_only=True)
     images = ImageUrlField(read_only=True, many=True)
     detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
     add_to_favorite = serializers.HyperlinkedIdentityField(view_name='create-favorite')
@@ -30,8 +30,9 @@ class PostSerializerForList(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'profile_photo', 'images', 'description',
-                  'number_of_likes', 'creation_date', 'detail', 'add_to_favorite', 'remove_from_favorites']
+        fields = ['id', 'company', 'profile_photo', 'images',
+                  'description', 'number_of_likes', 'creation_date', 'detail', 'add_to_favorite',
+                  'remove_from_favorites']
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):

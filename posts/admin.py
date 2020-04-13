@@ -14,6 +14,7 @@ class PostImagesInline(admin.TabularInline):
 
 
 class PostAdmin(admin.ModelAdmin):
+    fields = ['company', 'description']
     inlines = [
         CommentInline,
         PostImagesInline,
