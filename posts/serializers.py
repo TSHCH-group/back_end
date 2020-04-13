@@ -25,12 +25,13 @@ class PostSerializerForList(serializers.ModelSerializer):
     profile_photo = serializers.ImageField(source='user.company.profile_photo', read_only=True)
     images = ImageUrlField(read_only=True, many=True)
     detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
-    favorite = serializers.HyperlinkedIdentityField(view_name='favorite')
+    add_to_favorite = serializers.HyperlinkedIdentityField(view_name='create-favorite')
+    remove_from_favorites = serializers.HyperlinkedIdentityField(view_name='destroy-favorite')
 
     class Meta:
         model = Post
         fields = ['id', 'user', 'profile_photo', 'images', 'description',
-                  'number_of_likes', 'creation_date', 'detail', 'favorite']
+                  'number_of_likes', 'creation_date', 'detail', 'add_to_favorite', 'remove_from_favorites']
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):

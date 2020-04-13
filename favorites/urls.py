@@ -1,8 +1,13 @@
 from django.urls import path
 from .views import (
-    FavoriteAPIView
+    FavoriteCreateAPIView,
+    FavoriteDestroyAPIView,
+    FavoriteListAPIView,
 )
 
 urlpatterns = [
-    path('<int:post_id>/', FavoriteAPIView.as_view()),
+    path('create/<int:pk>/', FavoriteCreateAPIView.as_view(), name='create-favorite'),
+    path('destroy/<int:pk>/', FavoriteDestroyAPIView.as_view(), name='destroy-favorite'),
+    path('list/<str:username>/', FavoriteListAPIView.as_view()),
+
 ]
