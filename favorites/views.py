@@ -35,6 +35,3 @@ class FavoriteListAPIView(generics.RetrieveAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UserDataSerializer
     lookup_field = 'username'
-    #
-    # def get_queryset(self):
-    #     return get_user_model
