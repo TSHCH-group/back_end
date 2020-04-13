@@ -19,6 +19,7 @@ from django.conf import settings
 from rest_framework.documentation import include_docs_urls
 from rest_framework.schemas import get_schema_view
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 API_TITLE = 'Make Memories Api'
 schema_view = get_schema_view(title=API_TITLE)
@@ -26,10 +27,11 @@ schema_view = get_schema_view(title=API_TITLE)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('company/', include('companies.urls')),
-    path('authentification/', include('rest_auth.urls')),
-    path('api-auth/', include('rest_framework.urls')),
+    path('authentication/', include('rest_auth.urls')),
     path('registration/', include('rest_auth.registration.urls')),
     path('', include('posts.urls'), name='home'),
+    path('api/token/', TokenObtainPairView.as_view()),
+    path('api/token/refresh', TokenRefreshView.as_view()),
     path('docs/', include_docs_urls(title=API_TITLE)),
     path('schema/', schema_view)
 
