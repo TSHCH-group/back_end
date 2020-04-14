@@ -1,5 +1,7 @@
+from django.db import IntegrityError
 from rest_framework import generics, permissions
-from django.http import JsonResponse
+from rest_framework.views import APIView
+from django.http import JsonResponse, Http404
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from .models import Post, Comment, PostLikes
@@ -51,16 +53,26 @@ class CommentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializerForDetail
 
 
-def increase_likes_of_post(request, pk):
-    if request.user.is_authenticated():
-        post = get_object_or_404(Post, pk=pk)
-        try:
-            obj = PostLikes.objects.get(post_id=pk, user_id=request.user.id)
-        except:
-            PostLikes.objects.create(post_id=post, user_id=request.user)
-            post.number_of_likes = post.number_of_likes + 1
-            post.save()
-        return JsonResponse(post.number_of_likes)
+class PostLikesView(APIView):
+    permission_classes = (permissions.IsAuthenticated, )
 
-    else:
-        return JsonResponse("Authentication credentials not provided")
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        post = self.get_object(pk)
+        try:
+            post_like = PostLikes.objects.create(post=post, user=request.user)
+            post_like.save()
+            post.number_of_likes = post.number_of_likes + 1
+        except IntegrityError:
+            post_like = PostLikes.objects.get(post=post, user=request.user)
+            post_like.delete()
+            post.number_of_likes = post.number_of_likes - 1
+        post.save()
+        return JsonResponse({"number_of_likes": post.number_of_likes})
+
+

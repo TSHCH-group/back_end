@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Comment
-from django.conf import settings
+from .models import Post, Comment, PostImages
 
 
 class ImageUrlField(serializers.RelatedField):
@@ -28,12 +27,13 @@ class PostSerializerForList(serializers.ModelSerializer):
     detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
     add_to_favorite = serializers.HyperlinkedIdentityField(view_name='create-favorite')
     remove_from_favorites = serializers.HyperlinkedIdentityField(view_name='destroy-favorite')
+    like = serializers.HyperlinkedIdentityField(view_name='like')
 
     class Meta:
         model = Post
         fields = ['id', 'company', 'profile_photo', 'images',
                   'description', 'number_of_likes', 'creation_date', 'detail', 'add_to_favorite',
-                  'remove_from_favorites']
+                  'remove_from_favorites', 'like']
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):

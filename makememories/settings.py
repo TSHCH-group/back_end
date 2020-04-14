@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     # Local apps
     'posts.apps.PostsConfig',
     'companies.apps.CompaniesConfig',
-    'favorites.apps.FavoritesConfig'
+    'favorites.apps.FavoritesConfig',
 ]
 
 MIDDLEWARE = [

@@ -32,10 +32,11 @@ class PostImages(models.Model):
 
 
 class PostLikes(models.Model):
-    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['post_id', 'user_id'], name='Post likes'),
-        ]
+        unique_together = ['post', 'user']
+
+    def __str__(self):
+        return f'{self.user}: {self.post}'

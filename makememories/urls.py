@@ -28,13 +28,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('company/', include('companies.urls')),
     path('favorite/', include('favorites.urls')),
-    path('authentication/', include('rest_auth.urls')),
     path('registration/', include('rest_auth.registration.urls')),
     path('', include('posts.urls'), name='home'),
     path('login/', TokenObtainPairView.as_view()),
     path('api/token/refresh/', TokenRefreshView.as_view()),
     path('docs/', include_docs_urls(title=API_TITLE)),
-    path('schema/', schema_view)
+    path('schema/', schema_view),
 
 ]
 
