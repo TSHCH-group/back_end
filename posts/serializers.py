@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Comment
+from .models import Post, Comment, PostImages
 from django.conf import settings
 
 
@@ -29,7 +29,8 @@ class PostSerializerForList(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'company', 'profile_photo', 'images', 'description', 'number_of_likes', 'creation_date', 'detail']
+        fields = ['id', 'company', 'profile_photo', 'images', 'description', 'number_of_likes', 'creation_date',
+                  'detail']
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):
@@ -42,10 +43,25 @@ class PostSerializerForDetail(serializers.ModelSerializer):
         fields = ['id', 'user', 'images', 'description', 'creation_date', 'update_date', 'comments']
 
 
-class PostSerializerForCreate(serializers.ModelSerializer):
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostImages
+        fields = ['image', ]
+
+
+class PostSerializerForCreate(serializers.HyperlinkedModelSerializer):
+    images = ImageSerializer(source='postimages_set', many=True, read_only=True)
+
     class Meta:
         model = Post
         fields = ['description', 'images']
+
+    def create(self, validated_data):
+        images_data = self.context.get('view').request.FILES
+        post = Post.objects.create(company=self.context.get('view').request.user.company, description=validated_data.get('description'))
+        for image_data in images_data.values():
+            PostImages.objects.create(post=post, image=image_data)
+        return post
 
 
 class CommentSerializerForCreate(serializers.ModelSerializer):

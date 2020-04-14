@@ -30,7 +30,7 @@ urlpatterns = [
     path('registration/', include('rest_auth.registration.urls')),
     path('', include('posts.urls'), name='home'),
     path('login/', TokenObtainPairView.as_view()),
-    path('api/token/refresh', TokenRefreshView.as_view()),
+    path('api/token/refresh/', TokenRefreshView.as_view()),
     path('docs/', include_docs_urls(title=API_TITLE)),
     path('schema/', schema_view)
 
