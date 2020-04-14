@@ -27,6 +27,8 @@ schema_view = get_schema_view(title=API_TITLE)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('company/', include('companies.urls')),
+    path('favorite/', include('favorites.urls')),
+    path('authentication/', include('rest_auth.urls')),
     path('registration/', include('rest_auth.registration.urls')),
     path('', include('posts.urls'), name='home'),
     path('login/', TokenObtainPairView.as_view()),
