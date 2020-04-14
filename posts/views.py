@@ -13,7 +13,7 @@ from .serializers import (
 
 class PostListAPIView(generics.ListAPIView):
     queryset = Post.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     serializer_class = PostSerializerForList
 
 
