@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Post, Comment, PostImages
+from .models import Post, Comment, PostImages, PostLikes
+from favorites.models import FavoritePost
 
 
 class ImageUrlField(serializers.RelatedField):
@@ -27,13 +28,29 @@ class PostSerializerForList(serializers.ModelSerializer):
     detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
     add_to_favorite = serializers.HyperlinkedIdentityField(view_name='create-favorite')
     remove_from_favorites = serializers.HyperlinkedIdentityField(view_name='destroy-favorite')
-    like = serializers.HyperlinkedIdentityField(view_name='like')
+    saved = serializers.SerializerMethodField()
+    like_link = serializers.HyperlinkedIdentityField(view_name='like')
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = ['id', 'company', 'profile_photo', 'images',
                   'description', 'number_of_likes', 'creation_date', 'detail', 'add_to_favorite',
-                  'remove_from_favorites', 'like']
+                  'remove_from_favorites', 'saved', 'like_link', 'is_liked']
+
+    def get_saved(self, ob):
+        try:
+            print(FavoritePost.objects.get(user_id=self.context['request'].user.id, post_id=ob.id))
+        except FavoritePost.DoesNotExist:
+            return False
+        return True
+
+    def get_is_liked(self, obj):
+        try:
+            PostLikes.objects.get(user=self.context['request'].user, post=obj)
+            return True
+        except PostLikes.DoesNotExist:
+            return False
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):

@@ -17,7 +17,7 @@ from .serializers import (
 
 class PostListAPIView(generics.ListAPIView):
     queryset = Post.objects.all()
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = PostSerializerForList
     pagination_class = PageNumberPagination
     PageNumberPagination.page_size = 10
@@ -64,6 +64,7 @@ class PostLikesView(APIView):
 
     def put(self, request, pk):
         post = self.get_object(pk)
+        is_liked = True
         try:
             post_like = PostLikes.objects.create(post=post, user=request.user)
             post_like.save()
@@ -72,7 +73,8 @@ class PostLikesView(APIView):
             post_like = PostLikes.objects.get(post=post, user=request.user)
             post_like.delete()
             post.number_of_likes = post.number_of_likes - 1
+            is_liked = False
         post.save()
-        return JsonResponse({"number_of_likes": post.number_of_likes})
+        return JsonResponse({"number_of_likes": post.number_of_likes, 'is_liked': is_liked})
 
 
