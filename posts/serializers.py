@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Post, Comment
+from favorites.models import FavoritePost
 
 
 class ImageUrlField(serializers.RelatedField):
@@ -27,12 +28,20 @@ class PostSerializerForList(serializers.ModelSerializer):
     detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
     add_to_favorite = serializers.HyperlinkedIdentityField(view_name='create-favorite')
     remove_from_favorites = serializers.HyperlinkedIdentityField(view_name='destroy-favorite')
+    saved = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = ['id', 'company', 'profile_photo', 'images',
                   'description', 'number_of_likes', 'creation_date', 'detail', 'add_to_favorite',
-                  'remove_from_favorites']
+                  'remove_from_favorites', 'saved']
+
+    def get_saved(self, ob):
+        try:
+            print(FavoritePost.objects.get(user_id=self.context['request'].user.id, post_id=ob.id))
+        except:
+            return False
+        return True
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):
