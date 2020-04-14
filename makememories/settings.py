@@ -134,6 +134,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -156,14 +158,14 @@ SIMPLE_JWT = {
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
 
-AWS_ACCESS_KEY_ID = 'AKIA6KJK35DIJS3TAQ7F'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'makememories'
-
-AWS_S3_REGION_NAME = 'ap-northeast-2'
-AWS_S3_SIGNATURE_VERSION = 's3v4'
-
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# AWS_ACCESS_KEY_ID = 'AKIA6KJK35DIJS3TAQ7F'
+# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_STORAGE_BUCKET_NAME = 'makememories'
+#
+# AWS_S3_REGION_NAME = 'ap-northeast-2'
+# AWS_S3_SIGNATURE_VERSION = 's3v4'
+#
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+#
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

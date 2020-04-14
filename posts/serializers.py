@@ -26,30 +26,29 @@ class PostSerializerForList(serializers.ModelSerializer):
     profile_photo = serializers.ImageField(source='company.profile_photo', read_only=True)
     images = ImageUrlField(read_only=True, many=True)
     detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
-    add_to_favorite = serializers.HyperlinkedIdentityField(view_name='create-favorite')
-    remove_from_favorites = serializers.HyperlinkedIdentityField(view_name='destroy-favorite')
-    saved = serializers.SerializerMethodField()
+    add_remove_favorite = serializers.HyperlinkedIdentityField(view_name='create-favorite')
+    post_saved = serializers.SerializerMethodField()
     like_link = serializers.HyperlinkedIdentityField(view_name='like')
     is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = ['id', 'company', 'profile_photo', 'images',
-                  'description', 'number_of_likes', 'creation_date', 'detail', 'add_to_favorite',
-                  'remove_from_favorites', 'saved', 'like_link', 'is_liked']
+                  'description', 'number_of_likes', 'creation_date', 'detail', 'add_remove_favorite',
+                  'post_saved', 'like_link', 'is_liked']
 
-    def get_saved(self, ob):
+    def get_post_saved(self, ob):
         try:
-            print(FavoritePost.objects.get(user_id=self.context['request'].user.id, post_id=ob.id))
-        except FavoritePost.DoesNotExist:
+            FavoritePost.objects.get(user=self.context['request'].user, post_id=ob)
+            return True
+        except:
             return False
-        return True
 
     def get_is_liked(self, obj):
         try:
             PostLikes.objects.get(user=self.context['request'].user, post=obj)
             return True
-        except PostLikes.DoesNotExist:
+        except:
             return False
 
 
@@ -78,7 +77,8 @@ class PostSerializerForCreate(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         images_data = self.context.get('view').request.FILES
-        post = Post.objects.create(company=self.context.get('view').request.user.company, description=validated_data.get('description'))
+        post = Post.objects.create(company=self.context.get('view').request.user.company,
+                                   description=validated_data.get('description'))
         for image_data in images_data.values():
             PostImages.objects.create(post=post, image=image_data)
         return post
