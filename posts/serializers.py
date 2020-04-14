@@ -26,7 +26,7 @@ class PostSerializerForList(serializers.ModelSerializer):
     profile_photo = serializers.ImageField(source='company.profile_photo', read_only=True)
     images = ImageUrlField(read_only=True, many=True)
     detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
-    add_remove_favorite = serializers.HyperlinkedIdentityField(view_name='create-favorite')
+    save_or_del = serializers.HyperlinkedIdentityField(view_name='create-favorite')
     post_saved = serializers.SerializerMethodField()
     like_link = serializers.HyperlinkedIdentityField(view_name='like')
     is_liked = serializers.SerializerMethodField()
@@ -34,7 +34,7 @@ class PostSerializerForList(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'company', 'profile_photo', 'images',
-                  'description', 'number_of_likes', 'creation_date', 'detail', 'add_remove_favorite',
+                  'description', 'number_of_likes', 'creation_date', 'detail', 'save_or_del',
                   'post_saved', 'like_link', 'is_liked']
 
     def get_post_saved(self, ob):

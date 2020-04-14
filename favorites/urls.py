@@ -5,6 +5,6 @@ from .views import (
 )
 
 urlpatterns = [
-    path('create/<int:pk>/', CreateDestroyAPIView.as_view(), name='create-favorite'),
+    path('save/or/del/<int:pk>/', CreateDestroyAPIView.as_view(), name='create-favorite'),
     path('list/<str:username>/', FavoriteListAPIView.as_view()),
 ]
