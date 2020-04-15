@@ -36,15 +36,17 @@ class PostSerializerForList(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'company', 'profile_photo', 'images',
+        fields = ['id', 'company', 'company_id', 'profile_photo', 'longitude', 'latitude', 'images',
                   'description', 'number_of_likes', 'creation_date', 'detail', 'save_or_del',
                   'post_saved', 'like_link', 'is_liked']
 
     def get_post_saved(self, ob):
+        if not self.context['request'].user.is_authenticated:
+            return False
         try:
             FavoritePost.objects.get(user=self.context['request'].user, post_id=ob)
             return True
-        except:
+        except FavoritePost.DoesNotExist:
             return False
 
     def get_is_liked(self, obj):
