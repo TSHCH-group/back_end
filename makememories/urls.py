@@ -33,6 +33,7 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view()),
     path('api/token/refresh/', TokenRefreshView.as_view()),
     path('docs/', include_docs_urls(title=API_TITLE)),
+    path('user/', include('favorites.urls')),
     path('schema/', schema_view),
 
 ]

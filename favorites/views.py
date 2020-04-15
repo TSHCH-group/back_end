@@ -4,6 +4,8 @@ from .models import FavoritePost
 from posts.models import Post
 from .serializers import CreateFavoriteSerializer, ListFavoriteSerializer, UserDataSerializer
 from django.contrib.auth.models import User
+from rest_framework.views import APIView
+from django.http import JsonResponse
 
 
 class FavoriteCreateAPIView(generics.CreateAPIView):
@@ -35,3 +37,14 @@ class FavoriteListAPIView(generics.RetrieveAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UserDataSerializer
     lookup_field = 'username'
+
+
+class UserInfo(APIView):
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def get(self, request):
+        user_info = {
+            "username": request.user.username,
+            "email": request.user.email,
+        }
+        return JsonResponse(user_info)

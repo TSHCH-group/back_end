@@ -27,6 +27,8 @@ class Company(models.Model):
     background_photo = models.ImageField(upload_to='back_photos', blank=True)
     short_description = models.CharField(max_length=150)
     description = models.TextField()
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
 
     def __str__(self):
         return self.company_name

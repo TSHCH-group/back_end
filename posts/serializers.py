@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Post, Comment, PostImages, PostLikes
 from favorites.models import FavoritePost
+from companies.serializers import CompanyHyperLinkSerializer
 
 
 class ImageUrlField(serializers.RelatedField):
@@ -23,6 +24,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class PostSerializerForList(serializers.ModelSerializer):
     company = serializers.CharField(source='company.company_name', read_only=True)
+    company_id = serializers.IntegerField(source='company.user.id', read_only=True)
     profile_photo = serializers.ImageField(source='company.profile_photo', read_only=True)
     images = ImageUrlField(read_only=True, many=True)
     detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
@@ -31,10 +33,12 @@ class PostSerializerForList(serializers.ModelSerializer):
     saved = serializers.SerializerMethodField()
     like_link = serializers.HyperlinkedIdentityField(view_name='like')
     is_liked = serializers.SerializerMethodField()
+    longitude = serializers.DecimalField(source='company.longitude', read_only=True, max_digits=9, decimal_places=6)
+    latitude = serializers.DecimalField(source='company.latitude', read_only=True, max_digits=9, decimal_places=6)
 
     class Meta:
         model = Post
-        fields = ['id', 'company', 'profile_photo', 'images',
+        fields = ['id', 'company', 'company_id', 'profile_photo', 'longitude', 'latitude', 'images',
                   'description', 'number_of_likes', 'creation_date', 'detail', 'add_to_favorite',
                   'remove_from_favorites', 'saved', 'like_link', 'is_liked']
 
@@ -46,6 +50,8 @@ class PostSerializerForList(serializers.ModelSerializer):
         return True
 
     def get_is_liked(self, obj):
+        if not self.context['request'].user.is_authenticated:
+            return False
         try:
             PostLikes.objects.get(user=self.context['request'].user, post=obj)
             return True
@@ -78,7 +84,8 @@ class PostSerializerForCreate(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         images_data = self.context.get('view').request.FILES
-        post = Post.objects.create(company=self.context.get('view').request.user.company, description=validated_data.get('description'))
+        post = Post.objects.create(company=self.context.get('view').request.user.company,
+                                   description=validated_data.get('description'))
         for image_data in images_data.values():
             PostImages.objects.create(post=post, image=image_data)
         return post

@@ -6,7 +6,7 @@ from companies.models import Company
 # Create your models here.
 
 class Post(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=False)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=False, related_name='posts')
     description = models.TextField(blank=True)
     number_of_likes = models.PositiveIntegerField(default=0)
     creation_date = models.DateTimeField(auto_now_add=True)

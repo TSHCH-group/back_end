@@ -17,10 +17,10 @@ from .serializers import (
 
 class PostListAPIView(generics.ListAPIView):
     queryset = Post.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = PostSerializerForList
     pagination_class = PageNumberPagination
-    PageNumberPagination.page_size = 10
+    PageNumberPagination.page_size = 5
 
 
 class PostDetailAPIView(generics.RetrieveAPIView):
