@@ -17,7 +17,7 @@ from .serializers import (
 
 class PostListAPIView(generics.ListAPIView):
     queryset = Post.objects.all()
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.AllowAny,)
     serializer_class = PostSerializerForList
     pagination_class = PageNumberPagination
     PageNumberPagination.page_size = 5

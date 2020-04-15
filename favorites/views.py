@@ -1,35 +1,11 @@
+from django.http import JsonResponse
+from rest_framework import status
 from rest_framework import generics, permissions
-from .permissions import IsExist, IsPostExist, IsOwner
 from .models import FavoritePost
-from posts.models import Post
-from .serializers import CreateFavoriteSerializer, ListFavoriteSerializer, UserDataSerializer
+from .serializers import UserDataSerializer
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from django.http import JsonResponse
-
-
-class FavoriteCreateAPIView(generics.CreateAPIView):
-    queryset = FavoritePost.objects.all()
-    permission_classes = (permissions.IsAuthenticated, IsExist)
-    serializer_class = CreateFavoriteSerializer
-
-    def perform_create(self, serializer):
-        post = Post.objects.get(pk=self.kwargs['pk'])
-        serializer.save(user=self.request.user, post=post)
-
-
-class FavoriteDestroyAPIView(generics.DestroyAPIView):
-    queryset = FavoritePost.objects.all()
-    permission_classes = (permissions.IsAuthenticated, IsPostExist)
-    serializer_class = CreateFavoriteSerializer
-
-    def perform_destroy(self, instance):
-        instance.delete()
-
-    def destroy(self, request, *args, **kwargs):
-        post = Post.objects.get(pk=self.kwargs['pk'])
-        instance = FavoritePost.objects.get(user=self.request.user, post=post)
-        self.perform_destroy(instance)
 
 
 class FavoriteListAPIView(generics.RetrieveAPIView):
@@ -38,6 +14,19 @@ class FavoriteListAPIView(generics.RetrieveAPIView):
     serializer_class = UserDataSerializer
     lookup_field = 'username'
 
+
+class CreateDestroyAPIView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def put(self, request, pk):
+        try:
+            favorite = FavoritePost.objects.create(post_id=pk, user_id=request.user.id)
+            favorite.save()
+            return JsonResponse({'favorite': 'created'}, status=status.HTTP_201_CREATED)
+        except:
+            favorite = FavoritePost.objects.get(post_id=pk, user_id=request.user.id)
+            favorite.delete()
+            return JsonResponse({'favorite': 'destroyed'}, status=status.HTTP_200_OK)
 
 class UserInfo(APIView):
     permission_classes = (permissions.IsAuthenticated, )

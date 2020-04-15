@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Post, Comment, PostImages, PostLikes
 from favorites.models import FavoritePost
-from companies.serializers import CompanyHyperLinkSerializer
 
 
 class ImageUrlField(serializers.RelatedField):
@@ -28,9 +27,8 @@ class PostSerializerForList(serializers.ModelSerializer):
     profile_photo = serializers.ImageField(source='company.profile_photo', read_only=True)
     images = ImageUrlField(read_only=True, many=True)
     detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
-    add_to_favorite = serializers.HyperlinkedIdentityField(view_name='create-favorite')
-    remove_from_favorites = serializers.HyperlinkedIdentityField(view_name='destroy-favorite')
-    saved = serializers.SerializerMethodField()
+    save_or_del = serializers.HyperlinkedIdentityField(view_name='create-favorite')
+    post_saved = serializers.SerializerMethodField()
     like_link = serializers.HyperlinkedIdentityField(view_name='like')
     is_liked = serializers.SerializerMethodField()
     longitude = serializers.DecimalField(source='company.longitude', read_only=True, max_digits=9, decimal_places=6)
@@ -38,16 +36,16 @@ class PostSerializerForList(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'company', 'company_id', 'profile_photo', 'longitude', 'latitude', 'images',
-                  'description', 'number_of_likes', 'creation_date', 'detail', 'add_to_favorite',
-                  'remove_from_favorites', 'saved', 'like_link', 'is_liked']
+        fields = ['id', 'company', 'profile_photo', 'images',
+                  'description', 'number_of_likes', 'creation_date', 'detail', 'save_or_del',
+                  'post_saved', 'like_link', 'is_liked']
 
-    def get_saved(self, ob):
+    def get_post_saved(self, ob):
         try:
-            print(FavoritePost.objects.get(user_id=self.context['request'].user.id, post_id=ob.id))
-        except FavoritePost.DoesNotExist:
+            FavoritePost.objects.get(user=self.context['request'].user, post_id=ob)
+            return True
+        except:
             return False
-        return True
 
     def get_is_liked(self, obj):
         if not self.context['request'].user.is_authenticated:
