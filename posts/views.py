@@ -3,7 +3,6 @@ from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from django.http import JsonResponse, Http404
 from rest_framework.pagination import PageNumberPagination
-from django.shortcuts import get_object_or_404
 from .models import Post, Comment, PostLikes
 from .permissions import IsOwnerOrReadOnly, IsCompanyOrReadOnly
 from .serializers import (

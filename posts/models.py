@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from companies.models import Company
+from companies.models import compress
 
 
 # Create your models here.
@@ -29,6 +30,10 @@ class Comment(models.Model):
 class PostImages(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
     image = models.ImageField(upload_to='post')
+
+    def save(self, *args, **kwargs):
+        self.image = compress(self.image, 40)
+        super().save(*args, **kwargs)
 
 
 class PostLikes(models.Model):
