@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Comment, PostImages, PostLikes
+from .models import Post, Comment, PostImages, PostLikes, PostDislikes
 from favorites.models import FavoritePost
 
 
@@ -30,7 +30,9 @@ class PostSerializerForList(serializers.ModelSerializer):
     save_or_del = serializers.HyperlinkedIdentityField(view_name='create-favorite')
     post_saved = serializers.SerializerMethodField()
     like_link = serializers.HyperlinkedIdentityField(view_name='like')
+    dislike_link = serializers.HyperlinkedIdentityField(view_name='dislike')
     is_liked = serializers.SerializerMethodField()
+    is_disliked = serializers.SerializerMethodField()
     longitude = serializers.DecimalField(source='company.longitude', read_only=True, max_digits=9, decimal_places=6)
     latitude = serializers.DecimalField(source='company.latitude', read_only=True, max_digits=9, decimal_places=6)
 
@@ -38,7 +40,7 @@ class PostSerializerForList(serializers.ModelSerializer):
         model = Post
         fields = ['id', 'company_name', 'company', 'profile_photo', 'longitude', 'latitude', 'images',
                   'description', 'number_of_likes', 'creation_date', 'detail', 'save_or_del',
-                  'post_saved', 'like_link', 'is_liked']
+                  'post_saved', 'like_link', 'dislike_link', 'is_liked', 'is_disliked']
 
     def get_post_saved(self, ob):
         if not self.context['request'].user.is_authenticated:
@@ -57,6 +59,16 @@ class PostSerializerForList(serializers.ModelSerializer):
             return True
         except PostLikes.DoesNotExist:
             return False
+
+    def get_is_disliked(self, obj):
+        if self.get_is_liked(obj) or not self.context['request'].user.is_authenticated:
+            return False
+        try:
+            PostDislikes.objects.get(post=obj, user=self.context['request'].user)
+            return True
+        except PostDislikes.DoesNotExist:
+            return False
+
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):

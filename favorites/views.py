@@ -28,6 +28,7 @@ class CreateDestroyAPIView(APIView):
             favorite.delete()
             return JsonResponse({'favorite': 'destroyed'}, status=status.HTTP_200_OK)
 
+
 class UserInfo(APIView):
     permission_classes = (permissions.IsAuthenticated, )
 

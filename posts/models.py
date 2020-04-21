@@ -10,6 +10,7 @@ class Post(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=False, related_name='posts')
     description = models.TextField(blank=True)
     number_of_likes = models.PositiveIntegerField(default=0)
+    number_of_dislikes = models.PositiveIntegerField(default=0)
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
 
@@ -37,6 +38,17 @@ class PostImages(models.Model):
 
 
 class PostLikes(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['post', 'user']
+
+    def __str__(self):
+        return f'{self.user}: {self.post}'
+
+
+class PostDislikes(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
