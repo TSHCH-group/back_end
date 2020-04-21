@@ -7,11 +7,12 @@ from .serializers import UserDataSerializer
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from django.http import JsonResponse
+from .permissions import IsOwnerUser
 
 
 class FavoriteListAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsOwnerUser)
     serializer_class = UserDataSerializer
     lookup_field = 'username'
 
