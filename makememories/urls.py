@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('company/', include('companies.urls')),
     path('favorite/', include('favorites.urls')),
+    path('api-auth/', include('rest_framework.urls')),
     path('registration/', include('rest_auth.registration.urls')),
     path('', include('posts.urls'), name='home'),
     path('login/', TokenObtainPairView.as_view()),
