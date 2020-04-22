@@ -1,5 +1,4 @@
 from django.db import IntegrityError
-from django.http import JsonResponse
 from rest_framework import status
 from rest_framework import generics, permissions
 from .models import FavoritePost
@@ -7,13 +6,16 @@ from .serializers import UserDataSerializer
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from django.http import JsonResponse
+from rest_framework.response import Response
 
 
-class FavoriteListAPIView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
+class FavoriteListAPIView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = UserDataSerializer
-    lookup_field = 'username'
+
+    def get(self, request):
+        user = self.request.user
+        serializer = UserDataSerializer(user, context={'request': request})
+        return Response(serializer.data)
 
 
 class CreateDestroyAPIView(APIView):
@@ -30,14 +32,3 @@ class CreateDestroyAPIView(APIView):
             favorite = FavoritePost.objects.get(post_id=pk, user_id=request.user.id)
             favorite.delete()
             return JsonResponse({'favorite': False}, status=status.HTTP_200_OK)
-
-
-class UserInfo(APIView):
-    permission_classes = (permissions.IsAuthenticated, )
-
-    def get(self, request):
-        user_info = {
-            "username": request.user.username,
-            "email": request.user.email,
-        }
-        return JsonResponse(user_info)

@@ -39,7 +39,7 @@ class PostSerializerForList(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'company_name', 'company', 'profile_photo', 'longitude', 'latitude', 'images',
-                  'description', 'number_of_likes', 'creation_date', 'detail', 'save_or_del',
+                  'description', 'number_of_likes', 'number_of_dislikes', 'creation_date', 'detail', 'save_or_del',
                   'post_saved', 'like_link', 'dislike_link', 'is_liked', 'is_disliked']
 
     def get_post_saved(self, ob):
@@ -68,7 +68,6 @@ class PostSerializerForList(serializers.ModelSerializer):
             return True
         except PostDislikes.DoesNotExist:
             return False
-
 
 
 class PostSerializerForDetail(serializers.ModelSerializer):
