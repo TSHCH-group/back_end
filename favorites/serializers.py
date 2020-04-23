@@ -1,14 +1,15 @@
 from rest_framework import serializers
 from .models import FavoritePost
 from django.contrib.auth.models import User
+from companies.serializers import PostSerializer
 
 
 class ListFavoriteSerializer(serializers.ModelSerializer):
-    post = serializers.HyperlinkedRelatedField(read_only=True, view_name='detail-post')
+    post = PostSerializer(read_only=True)
 
     class Meta:
         model = FavoritePost
-        fields = ['post']
+        fields = ['post', ]
 
 
 class UserDataSerializer(serializers.ModelSerializer):
@@ -16,4 +17,4 @@ class UserDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'favorites']
+        fields = ['email', 'username', 'favorites']
