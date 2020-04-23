@@ -1,8 +1,13 @@
+from django.db.models import Q
 from django.http import JsonResponse
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from .models import Company
-from .serializers import CompanyCreateSerializer, CompanyDetailSerializer
+from .serializers import (
+    CompanyCreateSerializer,
+    CompanyDetailSerializer,
+    CompanySearchSerializer,
+)
 from .permissions import DoesNotHaveCompanyOrDeny
 
 
@@ -26,13 +31,29 @@ class CompanyDetailView(generics.RetrieveAPIView):
 class UserDetailView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get(self):
+    def get(self, request):
+        print(request)
         user_info = {
-            'username': self.request.user.username,
+            'username': request.user.username,
             'is_company': False,
         }
-        if hasattr(self.request.user, 'company'):
+        if hasattr(request.user, 'company'):
             user_info['is_company'] = True
-            user_info['company_name'] = self.request.user.company_name
+            user_info['company_name'] = request.user.company.company_name
 
         return JsonResponse(user_info)
+
+
+class CompanySearchView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny, )
+    serializer_class = CompanySearchSerializer
+
+    def get_queryset(self):
+        queryset_list = Company.objects.all()
+        query = self.request.GET.get("q")
+        if query:
+            queryset_list = queryset_list.filter(
+                Q(company_name__contains=query)
+            ).distinct()
+        return queryset_list
+

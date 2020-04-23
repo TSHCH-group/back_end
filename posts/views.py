@@ -69,6 +69,7 @@ class PostLikesView(APIView):
             post_disliked = PostDislikes.objects.get(post=post, user=request.user)
             post_disliked.delete()
             post.number_of_dislikes = post.number_of_dislikes - 1
+            post.company.number_of_dislikes = post.company.number_of_dislikes - 1
         except PostDislikes.DoesNotExist:
             pass
 
@@ -76,10 +77,12 @@ class PostLikesView(APIView):
             post_like = PostLikes.objects.create(post=post, user=request.user)
             post_like.save()
             post.number_of_likes = post.number_of_likes + 1
+            post.company.number_of_likes = post.company.number_of_likes + 1
         except IntegrityError:
             post_like = PostLikes.objects.get(post=post, user=request.user)
             post_like.delete()
             post.number_of_likes = post.number_of_likes - 1
+            post.company.number_of_likes = post.company.number_of_likes - 1
             is_liked = False
         post.save()
         return JsonResponse({"number_of_likes": post.number_of_likes, 'is_liked': is_liked,
@@ -96,16 +99,19 @@ class PostDislikesView(APIView):
             post_liked = PostLikes.objects.get(post=post, user=request.user)
             post_liked.delete()
             post.number_of_likes = post.number_of_likes - 1
+            post.company.number_of_likes = post.company.number_of_likes - 1
         except PostLikes.DoesNotExist:
             pass
         try:
             post_disliked = PostDislikes.objects.create(post=post, user=request.user)
             post_disliked.save()
             post.number_of_dislikes = post.number_of_dislikes + 1
+            post.company.number_of_dislikes = post.company.number_of_dislikes + 1
         except IntegrityError:
             post_disliked = PostDislikes.objects.get(post=post, user=request.user)
             post_disliked.delete()
             post.number_of_dislikes = post.number_of_dislikes - 1
+            post.company.number_of_dislikes = post.company.number_of_dislikes - 1
             is_disliked = False
         post.save()
         return JsonResponse({"number_of_likes": post.number_of_likes, 'is_liked': False,

@@ -39,3 +39,19 @@ class CompanyDetailSerializer(serializers.ModelSerializer):
         if self.context['request'].user == obj.user:
             return True
         return False
+
+
+class CompanySearchSerializer(serializers.ModelSerializer):
+    rating = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Company
+        fields = ['profile_photo', 'company_name', 'rating']
+
+    def get_rating(self, obj):
+        likes = obj.number_of_likes
+        dislikes = obj.number_of_dislikes
+        all = likes + dislikes
+        if all == 0:
+            return 0
+        return likes * 100 / all
