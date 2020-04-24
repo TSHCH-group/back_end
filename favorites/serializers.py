@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from .models import FavoritePost
 from django.contrib.auth.models import User
-from companies.serializers import PostSerializer
+from posts.serializers import PostSerializerForList
 
 
 class ListFavoriteSerializer(serializers.ModelSerializer):
-    post = PostSerializer(read_only=True)
+    post = PostSerializerForList(read_only=True)
 
     class Meta:
         model = FavoritePost

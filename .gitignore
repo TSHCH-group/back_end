@@ -3,6 +3,7 @@
 media/
 Pipfile
 Pipfile.lock
+Procfile
 db.sqlite3
 posts/migrations/
 companies/migrations/

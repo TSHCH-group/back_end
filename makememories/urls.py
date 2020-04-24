@@ -20,9 +20,11 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework.schemas import get_schema_view
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_swagger.views import get_swagger_view
 
-API_TITLE = 'Make Memories Api'
-schema_view = get_schema_view(title=API_TITLE)
+API_TITLE = 'Make Memories'
+API_DESCRIPTION = 'This site is for tourists and tour companies'
+schema_view = get_swagger_view(title=API_TITLE)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,8 +36,8 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view()),
     path('api/token/refresh/', TokenRefreshView.as_view()),
     path('docs/', include_docs_urls(title=API_TITLE)),
-    path('user/', include('companies.urls')),
-    path('schema/', schema_view),
+    path('user/', include('userinformation.urls')),
+    path('swagger-docs/', schema_view),
 
 ]
 

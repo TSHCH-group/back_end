@@ -22,7 +22,7 @@ class PostListAPIView(generics.ListAPIView):
     PageNumberPagination.page_size = 5
 
 
-class PostDetailAPIView(generics.RetrieveAPIView):
+class PostDetailAPIView(generics.RetrieveDestroyAPIView):
     queryset = Post.objects.all()
     permission_classes = (IsOwnerOrReadOnly,)
     serializer_class = PostSerializerForDetail

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Company
 from posts.models import Post, PostImages
-from posts.serializers import ImageUrlField
+from posts.serializers import ImageUrlField, PostSerializerForList
 
 
 class CompanyCreateSerializer(serializers.ModelSerializer):
@@ -28,7 +28,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 class CompanyDetailSerializer(serializers.ModelSerializer):
     is_owner = serializers.SerializerMethodField()
-    posts = PostSerializer(many=True, read_only=True)
+    posts = PostSerializerForList(many=True, read_only=True)
 
     class Meta:
         model = Company
