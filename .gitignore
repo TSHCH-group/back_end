@@ -9,3 +9,4 @@ posts/migrations/
 companies/migrations/
 favorites/migrations/
 makememories/__pycache__
+userinformation/migrations
