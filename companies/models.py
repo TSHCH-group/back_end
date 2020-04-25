@@ -8,7 +8,7 @@ from django.core.files import File
 def compress(image, quality=20):
     im_io = BytesIO()
     im = Image.open(image)
-    if im.mode != 'RGB':
+    if im.mode != 'RGB' or not image:
         im = im.convert('RGB')
         im.save("media/test.jpg")
     im.save(im_io, 'JPEG', quality=quality)
@@ -23,12 +23,10 @@ class Company(models.Model):
         primary_key=True,
     )
     company_name = models.CharField(max_length=50)
-    profile_photo = models.ImageField(upload_to='profile_photos', blank=True)
-    background_photo = models.ImageField(upload_to='back_photos', blank=True)
+    profile_photo = models.ImageField(blank=True)
+    background_photo = models.ImageField(blank=True)
     short_description = models.CharField(max_length=150)
     description = models.TextField()
-    number_of_likes = models.BigIntegerField(default=0)
-    number_of_dislikes = models.BigIntegerField(default=0)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
 

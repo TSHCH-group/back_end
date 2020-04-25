@@ -24,6 +24,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class PostSerializerForList(serializers.ModelSerializer):
     company_name = serializers.CharField(source='company.company_name', read_only=True)
     company = serializers.HyperlinkedRelatedField(view_name='company_detail', read_only=True)
+    create_comment = serializers.HyperlinkedIdentityField(view_name='comment-create')
     profile_photo = serializers.ImageField(source='company.profile_photo', read_only=True)
     images = ImageUrlField(read_only=True, many=True)
     detail = serializers.HyperlinkedIdentityField(view_name='detail-post')
@@ -39,8 +40,8 @@ class PostSerializerForList(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'company_name', 'company', 'profile_photo', 'longitude', 'latitude', 'images',
-                  'description', 'number_of_likes', 'number_of_dislikes', 'creation_date', 'detail', 'save_or_del',
-                  'post_saved', 'like_link', 'dislike_link', 'is_liked', 'is_disliked']
+                  'description', 'number_of_likes', 'number_of_dislikes', 'creation_date', 'detail', 'create_comment',
+                  'save_or_del', 'post_saved', 'like_link', 'dislike_link', 'is_liked', 'is_disliked']
 
     def get_post_saved(self, ob):
         if not self.context['request'].user.is_authenticated:
@@ -102,13 +103,8 @@ class PostSerializerForCreate(serializers.HyperlinkedModelSerializer):
         return post
 
 
-class CommentSerializerForCreate(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = ['post_id', 'date', 'text']
-
-
-class CommentSerializerForDetail(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['text']
+

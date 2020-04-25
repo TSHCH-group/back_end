@@ -1,14 +1,12 @@
 from django.db.models import Q
-from django.http import JsonResponse
 from rest_framework import generics, permissions
-from rest_framework.views import APIView
 from .models import Company
 from .serializers import (
-    CompanyCreateSerializer,
+    CompanyCreateUpdateSerializer,
     CompanyDetailSerializer,
     CompanySearchSerializer,
 )
-from .permissions import DoesNotHaveCompanyOrDeny
+from .permissions import DoesNotHaveCompanyOrDeny, IsOwnerOrReadOnly
 
 
 # Create your views here.
@@ -16,7 +14,7 @@ from .permissions import DoesNotHaveCompanyOrDeny
 class CompanyCreateView(generics.CreateAPIView):
     queryset = Company.objects.all()
     permission_classes = (permissions.IsAuthenticated, DoesNotHaveCompanyOrDeny,)
-    serializer_class = CompanyCreateSerializer
+    serializer_class = CompanyCreateUpdateSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -41,3 +39,8 @@ class CompanySearchView(generics.ListAPIView):
             ).distinct()
         return queryset_list
 
+
+class CompanyUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanyCreateUpdateSerializer
+    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly)

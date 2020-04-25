@@ -8,4 +8,4 @@ db.sqlite3
 posts/migrations/
 companies/migrations/
 favorites/migrations/
-__pycache__
+makememories/__pycache__
