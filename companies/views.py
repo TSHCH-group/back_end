@@ -31,7 +31,7 @@ class CompanySearchView(generics.ListAPIView):
     serializer_class = CompanySearchSerializer
 
     def get_queryset(self):
-        queryset_list = Company.objects.all()
+        queryset_list = Company.objects.all().order_by('company_name')
         query = self.request.GET.get("q")
         if query:
             queryset_list = queryset_list.filter(

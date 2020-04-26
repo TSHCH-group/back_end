@@ -9,8 +9,8 @@ from .views import (
     PostDislikesView,
 )
 urlpatterns = [
-    path('', PostListAPIView.as_view()),
-    path('post/create/', PostCreateAPIView.as_view()),
+    path('', PostListAPIView.as_view(), name='post-list'),
+    path('post/create/', PostCreateAPIView.as_view(), name='create-post'),
     path('post/detail/<int:pk>/', PostDetailAPIView.as_view(), name='detail-post'),
     path('comment/create/<int:pk>/', CommentCreateAPIView.as_view(), name='comment-create'),
     path('comment/detail/<int:pk>/', CommentDetailAPIView.as_view()),
