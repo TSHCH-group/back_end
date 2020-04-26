@@ -36,7 +36,7 @@ class CompanySearchView(generics.ListAPIView):
         if query:
             queryset_list = queryset_list.filter(
                 Q(company_name__contains=query)
-            ).distinct()
+            ).distinct().order_by('company_name')
         return queryset_list
 
 
