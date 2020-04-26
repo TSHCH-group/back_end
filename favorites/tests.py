@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from rest_framework import status
 from rest_framework.reverse import reverse
 
 from companies.models import Company
@@ -27,7 +28,18 @@ class FavoriteTest(TestCase):
         test_post = Post.objects.create(company=test_company, description="Test description")
         test_post.save()
 
-    def test_delete_favorite(self):
+    def test_user_list(self):
+        self.client.login(username='testuser', password='abc123')
+        data = {
+            "email": "",
+            "username": "testuser",
+            "favorites": []
+        }
+        response = self.client.get(reverse('favorite_list'))
+        self.assertEqual(response.data, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_create_favorite(self):
         self.client.login(username='testuser', password='abc123')
         response = self.client.put(reverse('create-favorite', kwargs={'pk': 1}))
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
