@@ -21,6 +21,8 @@ from rest_framework.schemas import get_schema_view
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_swagger.views import get_swagger_view
+from allauth.account.views import confirm_email
+
 
 API_TITLE = 'Make Memories'
 API_DESCRIPTION = 'This site is for tourists and tour companies'
@@ -38,7 +40,6 @@ urlpatterns = [
     path('docs/', include_docs_urls(title=API_TITLE)),
     path('user/', include('userinformation.urls')),
     path('swagger-docs/', schema_view),
-
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

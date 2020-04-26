@@ -11,4 +11,6 @@ favorites/migrations/
 makememories/__pycache__
 userinformation/migrations
 companies/__pycache__
-__pycache__
+favorites/__pycache__
+posts/__pycache__
+userinformation/__pycache__

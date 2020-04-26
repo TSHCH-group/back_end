@@ -18,6 +18,7 @@ def get_image_file(name, ext='jpeg', size=(50, 50), color=(256, 0, 0)):
     file_obj.seek(0)
     return File(file_obj, name=name)
 
+
 def get_company_information(pk):
     company = Company.objects.get(pk=pk)
     company_info= {
